@@ -3,16 +3,11 @@
 ```mermaid
 flowchart TB
 
-    %% =========================
-    %% DATA HOLDER LAYER
-    %% =========================
-
     subgraph DH["DATA HOLDER LAYER"]
         D1["Data Holder 01<br/>Local Dataset"]
         D2["Data Holder 02<br/>Local Dataset"]
         D3["Data Holder 03<br/>Local Dataset"]
         DN["Data Holder N<br/>Local Dataset"]
-
         P["Non-IID Partitioning<br/>IID / Dirichlet"]
 
         D1 --> P
@@ -21,23 +16,16 @@ flowchart TB
         DN --> P
     end
 
-    %% =========================
-    %% LOCAL TRAINING
-    %% =========================
-
     subgraph LT["LOCAL TRAINING"]
         R["Representation / Feature Adapter"]
         M["Detection Model"]
         T["Local Training"]
 
-        R --> M --> T
+        R --> M
+        M --> T
     end
 
     P --> R
-
-    %% =========================
-    %% PRIVACY
-    %% =========================
 
     subgraph DP["PRIVACY PROTECTION"]
         C["Per-Sample Gradient Clipping"]
@@ -50,40 +38,30 @@ flowchart TB
 
     T --> C
 
-    %% =========================
-    %% SECURE AGGREGATION
-    %% =========================
-
     subgraph SA["SECURE AGGREGATION"]
         MASK["Pairwise Zero-Sum Masking"]
         Q["Quorum / Dropout Recovery"]
         AGG["Protected Update Aggregation"]
 
-        MASK --> Q --> AGG
+        MASK --> Q
+        Q --> AGG
     end
 
     N --> MASK
-
-    %% =========================
-    %% ROBUST FEDERATION
-    %% =========================
 
     subgraph RF["ROBUST FEDERATED LEARNING"]
         V["Update Validation"]
         DEF["DualDefense / Robust Aggregation"]
         GM["Global Model"]
 
-        V --> DEF --> GM
+        V --> DEF
+        DEF --> GM
     end
 
     AGG --> V
 
-    %% =========================
-    %% SECURITY LAB
-    %% =========================
-
     subgraph SL["SECURITY & ATTACK LAB"]
-        INV["Gradient Inversion<br/>DLG / Reconstruction"]
+        INV["Gradient Inversion<br/>DLG Reconstruction"]
         POI["Byzantine Poisoning<br/>Sign Flip / ALIE / Replacement"]
         RES["Security Evaluation"]
 
@@ -95,16 +73,12 @@ flowchart TB
     GM --> POI
     DEF --> RES
 
-    %% =========================
-    %% EVALUATION
-    %% =========================
-
     subgraph EV["EVALUATION ENGINE"]
         U["Utility Metrics<br/>Accuracy / F1 / Loss"]
-        PR["Privacy Metrics<br/>ε / δ / Noise"]
+        PR["Privacy Metrics<br/>Epsilon / Delta / Noise"]
         RB["Robustness Metrics<br/>ASR / TPR / FPR / FNR"]
         PF["Performance Metrics<br/>Latency / RAM / Bandwidth"]
-        PX["Privacy–Utility–Security Analysis"]
+        PX["Privacy / Utility / Security Analysis"]
 
         U --> PX
         PR --> PX
@@ -117,10 +91,6 @@ flowchart TB
     DEF --> RB
     AGG --> PF
 
-    %% =========================
-    %% GOVERNANCE
-    %% =========================
-
     subgraph GOV["MODEL GOVERNANCE"]
         RG["Release Gate"]
         CERT["Model Certificate"]
@@ -131,10 +101,6 @@ flowchart TB
     end
 
     PX --> RG
-
-    %% =========================
-    %% REGISTRY + AUDIT
-    %% =========================
 
     subgraph OPS["MODEL & AUDIT LAYER"]
         MR["Model Registry"]
@@ -149,10 +115,6 @@ flowchart TB
     HOLD --> AL
     RG --> AL
     GM --> MR
-
-    %% =========================
-    %% USER / INTERFACE
-    %% =========================
 
     subgraph UI["TRACK-4 PRIVATE TRAINING CONTROL CENTER"]
         UI1["Federation Monitor"]
@@ -169,10 +131,6 @@ flowchart TB
     UI4 --> PX
     UI5 --> RG
     UI6 --> RP
-
-    %% =========================
-    %% STYLING
-    %% =========================
 
     classDef holder fill:#111827,stroke:#64748B,color:#F8FAFC,stroke-width:1px;
     classDef train fill:#172033,stroke:#60A5FA,color:#F8FAFC,stroke-width:1px;
@@ -196,15 +154,7 @@ flowchart TB
     class MR,AL,RP ops;
     class UI1,UI2,UI3,UI4,UI5,UI6 ui;
 
-    
-## And add this immediately below it
 
-This helps a non-ML judge understand the architecture without reading the entire diagram:
-
-```markdown
-### End-to-End Flow
-
-```text
 Private Data
      │
      ▼
@@ -251,16 +201,6 @@ Global Detection Model
                  Audit + Reports
 
 
-## For the README, I would also add this compact version near the top
-
-```markdown
-## How It Works
-
-**Track-4 Private Training** keeps source data inside participating data
-holders while coordinating collaborative model training through protected
-updates.
-
-```text
 DATA HOLDERS
      │
      ▼
