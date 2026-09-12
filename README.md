@@ -196,6 +196,7 @@ flowchart TB
     class MR,AL,RP ops;
     class UI1,UI2,UI3,UI4,UI5,UI6 ui;
 
+    
 ## And add this immediately below it
 
 This helps a non-ML judge understand the architecture without reading the entire diagram:
@@ -248,6 +249,7 @@ Global Detection Model
                        │
                        ▼
                  Audit + Reports
+
 
 ## For the README, I would also add this compact version near the top
 
